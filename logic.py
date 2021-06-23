@@ -18,9 +18,12 @@ class BuySellCoin:
 
         return response.json()["rate"]
 
-    def buy_coin(self, coin_name):
+    def buy_coin(self, coin_name, current_price=None):
         if coin_name=="BTC":
-            current_coin_price = self.get_btc_price(BTC_PRICE_API_KEY)
+            if current_price:
+                current_coin_price = float(current_price)
+            else:
+                current_coin_price = self.get_btc_price(BTC_PRICE_API_KEY)
 
             if self.capital > 0:
                 self.capital = self.capital - self.transaction_fee
@@ -47,12 +50,16 @@ class BuySellCoin:
                 print("Not enough balance to sell..")
 
     def read_signal(self, response_json):
+
         time_unit = response_json.json["timeUnit"]
         coin = response_json.json["base"]
         is_confirmed = response_json.json["confirmed"]
         signal = response_json.json["signal"]
+        current_coin_price = None
+        if "current_price" in response_json.json:
+            current_coin_price = response_json.json["current_price"]
 
         if signal == "long" and time_unit=="4_hour":
-            self.buy_coin(coin)
+            self.buy_coin(coin, current_coin_price)
         elif signal=="short" and time_unit=="4_hour":
             self.sell_coin(coin)
