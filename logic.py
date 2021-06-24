@@ -59,7 +59,7 @@ class BuySellCoin:
         if "current_price" in response_json.json:
             current_coin_price = response_json.json["current_price"]
 
-        if signal == "long" and time_unit=="4_hour":
+        if signal == "long" and time_unit=="30_minute":
             self.buy_coin(coin, current_coin_price)
-        elif signal=="short" and time_unit=="4_hour":
+        elif signal=="short" and time_unit=="30_minute":
             self.sell_coin(coin)

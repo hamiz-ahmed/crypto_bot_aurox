@@ -3,13 +3,13 @@ from logic import BuySellCoin
 app = Flask(__name__)
 
 
-bs = BuySellCoin()
-
+btc = BuySellCoin()
+# eth = BuySellCoin()
 @app.route('/webhook', methods=['POST'])
 def respond():
     print(request.json)
     # print(request.json["test"])
-    bs.read_signal(response_json=request)
+    btc.read_signal(response_json=request)
     return Response(status=200)
 
 
