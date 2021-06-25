@@ -1,5 +1,6 @@
 from flask import Flask, request, Response
 from logic import BuySellCoin
+from flask import jsonify
 app = Flask(__name__)
 
 
@@ -13,6 +14,11 @@ def respond():
     return Response(status=200)
 
 
-if __name__=="__main__":
+@app.route('/get_balance', methods=['GET'])
+def get_balance():
+    balance_dict = btc.get_current_balance()
+    return jsonify(balance_dict)
 
+
+if __name__=="__main__":
     app.run()

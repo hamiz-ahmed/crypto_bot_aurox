@@ -66,3 +66,10 @@ class BuySellCoin:
             self.buy_coin(coin, current_coin_price)
         elif signal=="short" and time_unit=="30_minute":
             self.sell_coin(coin)
+
+    def get_current_balance(self):
+        btc_price = self.get_btc_price(BTC_PRICE_API_KEY)
+        portfolio_value = btc_price*self.coin_balance
+        print("The current portfolio value is: "+ str(portfolio_value) + " and at current BTC price: " + str(btc_price))
+        return {"portfolio_value": portfolio_value,
+                "current_btc_price": btc_price}
