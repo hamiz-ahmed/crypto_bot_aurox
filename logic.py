@@ -72,4 +72,5 @@ class BuySellCoin:
         portfolio_value = btc_price*self.coin_balance
         print("The current portfolio value is: "+ str(portfolio_value) + " and at current BTC price: " + str(btc_price))
         return {"portfolio_value": portfolio_value,
-                "current_btc_price": btc_price}
+                "current_btc_price": btc_price,
+                "current_balance": self.coin_balance}
