@@ -1,9 +1,9 @@
 
 import requests
-
+import config
 
 INITIAL_CAPITAL = 1000
-BTC_PRICE_API_KEY = '2AC15ABF-77EA-4158-84BA-5B781B29EDD2'
+
 
 class BuySellCoin:
     def __init__(self):
@@ -23,7 +23,7 @@ class BuySellCoin:
             if current_price:
                 current_coin_price = float(current_price)
             else:
-                current_coin_price = self.get_btc_price(BTC_PRICE_API_KEY)
+                current_coin_price = self.get_btc_price(config.BTC_PRICE_API_KEY)
 
             if self.capital > 0:
                 self.capital = self.capital - self.transaction_fee
@@ -37,7 +37,7 @@ class BuySellCoin:
 
     def sell_coin(self, coin_name):
         if coin_name=="BTC":
-            current_coin_price = self.get_btc_price(BTC_PRICE_API_KEY)
+            current_coin_price = self.get_btc_price(config.BTC_PRICE_API_KEY)
 
             if self.coin_balance > 0:
                 self.capital = self.coin_balance * current_coin_price
@@ -68,7 +68,7 @@ class BuySellCoin:
             self.sell_coin(coin)
 
     def get_current_balance(self):
-        btc_price = self.get_btc_price(BTC_PRICE_API_KEY)
+        btc_price = self.get_btc_price(config.BTC_PRICE_API_KEY)
         portfolio_value = btc_price*self.coin_balance
         print("The current portfolio value is: "+ str(portfolio_value) + " and at current BTC price: " + str(btc_price))
         return {"portfolio_value": portfolio_value,
