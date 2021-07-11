@@ -49,8 +49,8 @@ class BuySellCoin:
 
     def check_for_sell(self, current_coin_price, ws):
         self.sell_routine_running = True
-        # minutes_since_bought = (time.time() - self.buy_time) / 60
-        minutes_since_bought = 130
+        minutes_since_bought = (time.time() - self.buy_time) / 60
+        # minutes_since_bought = 130
         if minutes_since_bought > float(list(self.roi.keys())[0]) and minutes_since_bought < float(list(self.roi.keys())[1]):
             target_percent = self.roi[list(self.roi.keys())[0]]
 
