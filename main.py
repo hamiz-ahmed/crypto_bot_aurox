@@ -1,10 +1,10 @@
 from flask import Flask, request, Response, after_this_request
 from logic import BuySellCoin
 from flask import jsonify
-from concurrent.futures import ThreadPoolExecutor
+
 
 # DOCS https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.ThreadPoolExecutor
-executor = ThreadPoolExecutor(1)
+
 
 app = Flask(__name__)
 
@@ -16,7 +16,7 @@ def respond():
     # print(request.json)
     # print(request.json["test"])
     btc.read_signal(response_json=request)
-    executor.submit(threaded_task)
+
 
     return Response(status=200)
 
@@ -27,9 +27,7 @@ def get_balance():
     return jsonify(balance_dict)
 
 
-def threaded_task():
-    if not btc.sell_routine_running:
-        btc.socket_conn_for_sell()
+
 
 # @app.route('/socket', methods=['GET'])
 # def socket_conn():

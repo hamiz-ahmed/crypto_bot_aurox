@@ -4,6 +4,8 @@ import config
 import websocket, json
 INITIAL_CAPITAL = 1000
 import time
+from concurrent.futures import ThreadPoolExecutor
+
 
 class BuySellCoin:
     def __init__(self):
@@ -11,10 +13,11 @@ class BuySellCoin:
         self.coin_balance = 0
         self.transaction_fee = 0.30
         self.roi = {
-        "0": 0.002,
-        "90": 0.001,
-        "120": 0
+        "0": 0.05,
+        "60": 0.01,
+        "240": 0
     }
+        self.executor = ThreadPoolExecutor(1)
         self.buy_price = 0
         self.buy_time = 0
         self.stoploss = -0.03
@@ -44,6 +47,9 @@ class BuySellCoin:
 
                 self.buy_price = current_coin_price
                 self.buy_time = time.time()
+
+                # start the thread for sell
+                self.executor.submit(self.threaded_task)
             else:
                 print("Not enough capital to buy")
 
@@ -122,6 +128,7 @@ class BuySellCoin:
         if signal == "long" and time_unit=="30_minute":
             self.buy_coin(coin, current_coin_price)
 
+
         # elif signal=="short" and time_unit=="30_minute":
         #     self.sell_coin(coin)
 
@@ -131,7 +138,8 @@ class BuySellCoin:
         print("The current portfolio value is: "+ str(portfolio_value) + " and at current BTC price: " + str(btc_price))
         return {"portfolio_value": portfolio_value,
                 "current_btc_price": btc_price,
-                "current_capital": self.capital}
+                "current_capital": self.capital,
+                "buy_price": self.buy_price}
 
     def socket_conn_for_sell(self):
         def on_message(ws, message):
@@ -149,3 +157,7 @@ class BuySellCoin:
                                     on_close=on_close)
         self.sell_routine_running = True
         ws.run_forever()
+
+    def threaded_task(self):
+        if not self.sell_routine_running:
+            self.socket_conn_for_sell()
